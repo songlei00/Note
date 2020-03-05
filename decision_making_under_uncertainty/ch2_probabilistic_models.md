@@ -47,8 +47,22 @@ $$p(x|\mu_1, \sigma_1^2, ..., \rho_1, ...) = \sum_{i=1}^{n}\rho_i N(x|\mu_i, \si
 
 ## 2. 推理inference
 需要得到值的变量称为query variable，先前已经知道值的变量为evidence variable，其他的为hidden variable
-### 1. 分类问题的推理
-主要讲了使用naive bayes的推论，分母看做常数，然后归一化，考虑不同问题设置不同的阈值等等。
+推理就是由证据变量的值确定一个或多个查询变量的分布
+### 1. 贝叶斯网络上的推理和分类问题的推理
+1. 主要讲了使用naive bayes的推论，分母看做常数，然后归一化，考虑不同问题设置不同的阈值等等。
+2. 对隐变量的求和过程称为边际化，如$P(b^1, d^1, c^1)=\sum_s\sum_eP(b^1, s, e, d^1, c^1)$，再用链式法则，转化为已知概率的形式
+3. 因子可以理解为表格，因子相乘可以扩张表格，而因子边际化和设置证据可以看做一种减小表格的操作
+#### 1. 枚举推理
+$P(Y) = \sum_X\prod_iP(X_i|Pa_{X_i})$
+上面的连乘称为因子相乘，对因变量求和称为因子边际化，而求出右边的式子后，要对观察到的变量即证据变量设置值，称为设置证据
+![20200305194747.png](https://raw.githubusercontent.com/s974534426/img_for_notes/master/20200305194747.png)
+#### 2. 因子相乘
+![20200305194903.png](https://raw.githubusercontent.com/s974534426/img_for_notes/master/20200305194903.png)
+#### 3. 因子边际化
+![20200305194941.png](https://raw.githubusercontent.com/s974534426/img_for_notes/master/20200305194941.png)
+#### 4. 设置证据
+![20200305195007.png](https://raw.githubusercontent.com/s974534426/img_for_notes/master/20200305195007.png)
+
 ### 2. 时序模型上的推理
 #### 1. 分类
 推理任务主要分为4类
@@ -58,13 +72,30 @@ $$p(x|\mu_1, \sigma_1^2, ..., \rho_1, ...) = \sum_{i=1}^{n}\rho_i N(x|\mu_i, \si
 4. Most likely explanation，$arg\ max_{S_{0:t}}P(S_{0:t}|O_{0:t})$
 #### 2. Filtering推理
 即如何得到$P(S_t|O_{0:t})$
-首先根据bayes' rule，$P(s_t|o_{0:t})\propto P(o_t|s_t,o_{0:t-1})P(s_t|o_{0:t-1})$，然后经过适当变形(根据图上的独立性关系)得到$$P(s_t|o_{0:t})\propto P(o_t|s_t)\sum_{s_{t-1}}P(s_t|s_{t-1})P(s_{t-1}|o_{0:t-1})$$，这就得到了一个递推式，其中$P(o_t|s_t)$和$P(s_t|s_{t-1})$可以根据隐马尔科夫模型直接得到，而第三项是t-1时刻的值，所以只要从0时刻不断迭代，就可以得到t时刻的值，这个过程叫做recursive Bayesian estimation，具体算法如下
+首先根据bayes' rule，$P(s_t|o_{0:t})\propto P(o_t|s_t,o_{0:t-1})P(s_t|o_{0:t-1})$，然后经过适当变形(根据图上的独立性关系)得到$$P(s_t|o_{0:t})\propto P(o_t|s_t)\sum_{s_{t-1}}P(s_t|s_{t-1})P(s_{t-1}|o_{0:t-1})$$，这就得到了一个递推式，其中$P(o_t|s_t)$和$P(s_t|s_{t-1})$可以根据隐马尔科夫模型直接得到，而第三项是t-1时刻的值，所以只要从0时刻不断迭代，就可以得到t时刻的值，这个过程叫做recursive Bayesian estimation(也叫前向算法)，具体算法如下
 ![20200304090647.png](https://raw.githubusercontent.com/s974534426/img_for_notes/master/20200304090647.png)
-#### 3. 精确推理
-进行精确推理的复杂度是指数级别的，但可以通过variable elimination的方法，在一般情况下变为线性，但最坏仍是指数，其实暂时没有太看懂，TODO
-#### 4. 精确推理的复杂度
+#### 3. 预测
+首先利用滤波得到当前的状态概率分布，然后不断代下面这个公式
+$$P(s_{t+k+1}|o_{0:t})=\sum_{s_{t+k}}P(s_{t+k+1}|s_{t+k})P(s_{t+k}|o_{0:t})$$
+
+#### 4. 平滑
+$$P(s_k|o_{0:t})=P(s_k|o_{0:k}, o_{k+1:t}) \propto P(s_k|o_{0:k})P(o_{k+1:t}|s_k, o_{0:k}) = P(s_k|o_{0:k})P(o_{k+1:t}|s_k)$$
+最后的式子中，第一项使用前向算法，第二项使用后向算法，所以名字叫做前向后向算法。。。
+**后向算法**
+![20200305211831.png](https://raw.githubusercontent.com/s974534426/img_for_notes/master/20200305211831.png)
+#### 5. 寻找最可能序列
+Viterbi(维特比)算法
+大概就是从前向后计算，但后面的计算要用到前面估计的状态
+### 3. 精确推理
+#### 1. 变量消去法
+大概就是先列出所有涉及到的变量的表格，然后消去隐变量，消除隐变量时，先对所有涉及到这个隐变量的表格进行因子相乘，然后再利用边际化(也就是求和操作)消去这个隐变量，不断重复
+消去变量的顺序有时会对算法运行时间造成巨大影响，选择最优消元顺序是NP难问题
+#### 2. 信念传播法BP
+将变量消去法中求和操作看做一个消息传递的过程
+
+### 4. 精确推理的复杂度
 主要讲了P和NP，NP-hard，以及规约等等，贝叶斯网络上的推理是NP-hard问题，可以通过画出3-SAT的贝叶斯网证明
-#### 5. 近似推理
+### 5. 近似推理
 通过从联合分布表示的贝叶斯网络上采样得到
 1. direct sample
 先得到贝叶斯网络节点的拓扑序，然后依次采样
@@ -73,7 +104,7 @@ $$p(x|\mu_1, \sigma_1^2, ..., \rho_1, ...) = \sum_{i=1}^{n}\rho_i N(x|\mu_i, \si
 主要区别是，对于观察到的变量，我们直接赋值为1而不是进行采样
 ![20200304094135.png](https://raw.githubusercontent.com/s974534426/img_for_notes/master/20200304094135.png)
 3. 吉布斯采样Gibbs sampling，MCMC方法的一种
-4. BP算法loopy belief propagation
+4. loopy belief propagation
 
 
 
