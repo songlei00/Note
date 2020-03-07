@@ -1,4 +1,5 @@
 # 1. 小试牛刀
+Shell确实很好用，也有很丰富很丰富的功能，在一些简单的任务中，可以使用shell加快效率，但如果比较复杂的任务，还是建议用python写脚本。
 ## 1. 简介
 shell脚本第一行通常是```#! /bin/bash```，这是称为shebang的特殊行(其实没啥用，但好有意思。。。)指定了运行脚本的解释器
 运行时有两种方法，一种是```sh script.sh```，这种情况下，其实sh已经指定了解释器，所以shebang其实是没用的
@@ -95,8 +96,78 @@ fname arg1 arg2
 在函数内用```$1```等调用参数
 函数也可以递归
 Fork炸弹，看起来很有意思，自行google。。。
+可以用```$?```获取函数返回值
 
+## 12. 读取命令序列输出
+1. 管道重定向
+2. ```cmd_output=$(COMMANDS)```
+3. 反引用``cmd_output=`COMMANDS` ``
 
+后两种在写shell脚本时很好用
 
+### 子shell
+用圆括号包括子shell，子shell执行不会对当前shell有任何影响
 
+## 13. 以不按回车的方式读取字符n
+read用于读取键盘输入
+-n可以控制读取n个字符
+-t可以特定时限
+
+## 14. 循环
+``` shell
+for var in list;
+do
+commands;
+done
+```
+生成序列时可以用```echo {1..50}```或```echo {a..z}```
+``` shell
+for((i=0;i<10;i++))
+{
+commands;
+}
+```
+``` shell
+while condition
+do
+commands;
+done
+```
+
+## 15. 比较与测试
+### if
+``` shell
+if condition;
+then
+commands;
+elif condition;
+then
+    commands;
+else
+    commands;
+fi
+```
+或者我们可以用一些简单的操作，很漂亮的写法，利用逻辑判断符
+``` shell
+[ condition ] && action;
+[ condition ] || action;
+```
+### 算数比较
+条件一般放在封闭中括号中，**注意在[或]与操作数之间一定要有一个空格**
+等于-eq
+不等于-ne
+大于-gt
+小于-lt
+大于等于-ge
+小于等于-le
+逻辑与-a
+逻辑或-o，这里说的是在方括号内的逻辑与和或，如果连接两个方括号，依然可以使用&&和||
+例子：```[ $var1 -ne 0 -a $var2 -ge 2 ]```
+其他还有一些复杂的判断
+
+### 字符串比较
+使用字符串比较时，最好使用**双中括号**，单个中括号有时会产生错误，最好避开
+```[[ $str1 = $str2 ]]```判断是否相等，一个是要用双括号，一个是注意等号两边有空格
+```[[ -z $str1 ]]```字符串为空，则返回真
+```[[ -n $str1 ]]```字符串非空，则返回真
 
