@@ -80,6 +80,23 @@ echo "4 * 0.56" | bc
 
 ## 10. 调试脚本
 
+## 11. 函数和参数
+定义和使用
+```shell
+fname()
+{
+statements
+return
+}
+
+fname 
+fname arg1 arg2
+```
+在函数内用```$1```等调用参数
+函数也可以递归
+Fork炸弹，看起来很有意思，自行google。。。
+
+
 
 
 
