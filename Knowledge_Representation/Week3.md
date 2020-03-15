@@ -1,3 +1,4 @@
+# Moving toward Formalisation
 
 Normalise Terms
 将Term的形式统一，名词全部改为单数形式，描述类的词改为形容词，还有大小写问题，concept name要首字母大写，role name首字母小写，用驼峰式记法，individual全部小写。
