@@ -43,6 +43,11 @@ Protocol：协议，是DE和KE之间的一个协议，对每个人的分工，�
 
 #### Modelling Technology
 主要讲分类方法
+1. Being picky
+2. Sorting techniques，用于找到人们比较和排序概念的方式，能够揭示类别、性质、优先级等等知识
+3. Hierarchy-generation techniques，建立层级关系
+4. Matrix based techniques，
+5. Limited-information and constrained-processing tasks，限制DE的时间或获得的信息
 Card Sorting，将卡片分为一堆，然后对每堆进行辨别(这里可能引出新的概念)，
 3 Card Trick，随机挑选三张，找出其中更加相似的两张
 
