@@ -24,4 +24,4 @@ Protege中的推理会做如下的见检查
 需要注意的是，最后一个是这种形式：$t_x(r\ only\ C) = \forall y.r(x, y)\rightarrow t_y(C)$
 
 ## 5. Object Oriented Formulation
-好像就是说
+Ontology和面向对象的一些类似之处，比如individual和一个类的实例类似，class和类类似，等等
