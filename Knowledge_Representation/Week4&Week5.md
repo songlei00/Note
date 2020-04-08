@@ -8,16 +8,20 @@ SPARQL，一种查询语言，类似传统数据库中的SQL
 完整世界的概念化模型，首先会定义这个领域所有词汇
 
 ## 3. Semantics
+这里主要讲了一些语义方面的知识
+![20200408085722](https://raw.githubusercontent.com/s974534426/Img_for_notes/master/20200408085722.png)
+![20200408085754](https://raw.githubusercontent.com/s974534426/Img_for_notes/master/20200408085754.png)
+
 - O is consistent if there exists some model I of O
 - O entails $\alpha$，($O $)，左边式子的所有model都满足右边式子
-- A is satisfiable，Ontology层面用consistent，class层面用satisfiable
+- A is satisfiable。。。，Ontology层面用consistent，class层面用satisfiable
+
+Protege中的推理会做如下的见检查
+![20200408091625](https://raw.githubusercontent.com/s974534426/Img_for_notes/master/20200408091625.png)
 
 ## 4. OWL和FOL的转化
-$t_x(r\ only\ C) = \forall y.r(x, y)\rightarrow t_y(C)$
+![20200408092648](https://raw.githubusercontent.com/s974534426/Img_for_notes/master/20200408092648.png)
+需要注意的是，最后一个是这种形式：$t_x(r\ only\ C) = \forall y.r(x, y)\rightarrow t_y(C)$
 
 ## 5. Object Oriented Formulation
-
-## 6. Patterns of axioms
-就是对一些常用的方法的总结
-命名：class name一般用单数，首字母大写，多个词时要用驼峰法；individual全部小写，不同单词用下划线划分；Property name首字母小写，用驼峰结构
-所有的classes和individuals都要有label，creator，也就是有合适的注释
+好像就是说
