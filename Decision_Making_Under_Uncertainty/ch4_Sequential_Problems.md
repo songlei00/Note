@@ -1,5 +1,5 @@
 # ch4 Sequential Problems 完全可观察环境中的概率规划系统
-
+第四五节好难。。。策略和值函数，有时间重看并记笔记
 ## 0. 背景
 经典规划的基本假设
 1. 有限系统
@@ -25,12 +25,48 @@
 这一章的内容关于在模型已知且环境完全可观察时的序贯决策
 
 ### 1. Markov Decision Processes
+#### 定义
+马尔科夫假设：下一状态仅仅与当前观察和行动，与先前的所有观察和行动无关，$P(S_{t+1}=s', R_t=r|S_t=s, A_t=a)$
+
 马尔科夫决策过程MDP中，一个agent在时间t基于当前的观察$o_t$选择行动action$_t$，然后接受奖励$r_t$
 
-下一状态仅仅与当前观察和行动，与先前的所有观察和行动无关
+![20200409191853](https://raw.githubusercontent.com/s974534426/Img_for_notes/master/20200409191853.png)
+
+#### 轨道
+一个时间离散化的agent环境交互过程可以用轨道来表示$S_0, O_0, A_0, R_0, ..., S_n, O_n, A_n, R_n, ...$
+
+无限步数(连续式)决策任务：交互要一直进行下去
+
+有限步数(情节式，回合制)决策任务有一个结束状态s
+
+完全可观察时，$O_t = S_t$，上面的轨道可以省略观察
+
+#### 稳态MDPs
+$P(S_{t+1}, R_t| S_t, A_t)$不随时间变化
+
+![20200409194022](https://raw.githubusercontent.com/s974534426/Img_for_notes/master/20200409194022.png)
+
+![20200409194056](https://raw.githubusercontent.com/s974534426/Img_for_notes/master/20200409194056.png)
 
 ### 2. Utility and Reward
 介绍了定义奖励的一些方法
+
+MDP中的奖赏可视为一个加法效用函数的组件
+
+#### 有限步数
+奖赏为$\sum_{t=0}^{n-1}R_t$
+
+#### 无限步数
+- 使用折扣因子定义效用，$\sum_{t=0}^{\infin}\gamma^tR_t$
+- 使用平均奖赏定义效用，$lim_{n\rightarrow \infin}\frac{1}{n}\sum_{t=0}^{n-1}R_t$
+
+折扣因子的作用
+- 使得当前奖励比未来奖赏更有价值
+- 只要奖赏有限，效用也是有限数
+
+#### 状态值函数
+![20200409202228](https://raw.githubusercontent.com/s974534426/Img_for_notes/master/20200409202228.png)
+
 
 ## 2， Dynamic Programming
 ### 1. Policies and Utilities
