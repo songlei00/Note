@@ -163,5 +163,28 @@ $$U^*_n(s) = max_{a}(R(s, a)+\gamma\sum_{s'}T(s'|s, a)U_{n-1}^*(s'))$$
 决策树还可以压缩表示为决策图
 
 ## 4. Linear Representations
+这一节处理的问题是状态空间连续，动作空间满足一些特定条件的问题。
+
+## 5. Approximate Dynamic Programming
+### 1. Local Approximation
+局部近似算法依赖于邻近的状态有相似的值的假设
+
+这样，我们就可以用$U(s) = \sum_{i=1}^n\lambda_i\beta_i(s)$得到估计值，其中的$\lambda$为每个状态的值，$\beta$为这个状态的权重，这里的$\beta_i$的和为1
+
+![20200423230124](https://raw.githubusercontent.com/s974534426/Img_for_notes/master/20200423230124.png)
+
+这个循环直到$\lambda$收敛时才会停止
+
+### 2. Global Approximation
+全局近似是使用固定的一组$\lambda$近似整个空间的值函数
+
+最常用的一种方法是用线性回归，$U(s) = \sum_{i=1}^n\lambda_i\beta_i(s)$，将其中的$\beta$看作是要学习的特征。虽然表达式和上面相同，但解释完全不同，这里的$\lambda$不和一个离散的状态对应，$\beta$也不和一种距离度量方式对应
+
+![20200423231432](https://raw.githubusercontent.com/s974534426/Img_for_notes/master/20200423231432.png)
+
+第六行中，是使用线性回归得到$\lambda$，一种常见的方法是最小化平方和$\sum_{i=1}^n(\lambda^{\top}\beta(s_i)-u_i)^2$
+
+## 6. Online Methods
+
 
 
