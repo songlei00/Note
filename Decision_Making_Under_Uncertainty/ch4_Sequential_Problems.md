@@ -165,26 +165,108 @@ $$U^*_n(s) = max_{a}(R(s, a)+\gamma\sum_{s'}T(s'|s, a)U_{n-1}^*(s'))$$
 ## 4. Linear Representations
 这一节处理的问题是状态空间连续，动作空间满足一些特定条件的问题。
 
+1. 状态转移函数是线性的，$T(s'|s, a) = T_ssT_aa+w$，w是均值为0，方差有限的噪声
+2. 期望奖赏是二次的，$R(s, a)=s^{\top}R_ss+a^{\top}R_aa, R_s=R_s^{\top}\leq0, R_a=R_a^{\top}<0$
+
 ## 5. Approximate Dynamic Programming
 ### 1. Local Approximation
 局部近似算法依赖于邻近的状态有相似的值的假设
 
 这样，我们就可以用$U(s) = \sum_{i=1}^n\lambda_i\beta_i(s)$得到估计值，其中的$\lambda$为每个状态的值，$\beta$为这个状态的权重，这里的$\beta_i$的和为1
 
+![20200424085959](https://raw.githubusercontent.com/s974534426/Img_for_notes/master/20200424085959.png)
+
 ![20200423230124](https://raw.githubusercontent.com/s974534426/Img_for_notes/master/20200423230124.png)
 
 这个循环直到$\lambda$收敛时才会停止
 
+#### 最近邻方法
+把所有权重赋给与s最接近的状态，得到分段常值函数$U(s)=u_{argmin_{i\in 1:n}d(s_i, s)}$
+
+#### k近邻近似
+将与s最接近的k个状态，每个赋予$\frac{1}{k}$的权重
+
+#### 线性插值
+使用一个状态的邻域内，多个已知状态的值计算
+
+邻域函数$N(s)$：从$s_{1:n}$中返回一个状态子集
+
+![20200424090717](https://raw.githubusercontent.com/s974534426/Img_for_notes/master/20200424090717.png)
+
+#### 双线性插值
+![20200424090813](https://raw.githubusercontent.com/s974534426/Img_for_notes/master/20200424090813.png)
+
+注意$\alpha$是对应状态的对角的面积
+
+#### 多线性插值
+处理高维状态空间
+
+在d维网格中，有多达$2^d$个邻居
+
+#### 单纯性插值
+高维问题
+
+![20200424091243](https://raw.githubusercontent.com/s974534426/Img_for_notes/master/20200424091243.png)
+
+线性增长，而多线性指数增长
+
 ### 2. Global Approximation
 全局近似是使用固定的一组$\lambda$近似整个空间的值函数
 
-最常用的一种方法是用线性回归，$U(s) = \sum_{i=1}^n\lambda_i\beta_i(s)$，将其中的$\beta$看作是要学习的特征。虽然表达式和上面相同，但解释完全不同，这里的$\lambda$不和一个离散的状态对应，$\beta$也不和一种距离度量方式对应
+最常用的一种方法是用线性回归，$U(s) = \sum_{i=1}^n\lambda_i\beta_i(s)$，将其中的$\beta$看作是要学习的特征。虽然表达式和上面相同，但解释完全不同，这里的$\lambda$不和一个离散的状态对应，$\beta$也不与度量相关
 
 ![20200423231432](https://raw.githubusercontent.com/s974534426/Img_for_notes/master/20200423231432.png)
 
 第六行中，是使用线性回归得到$\lambda$，一种常见的方法是最小化平方和$\sum_{i=1}^n(\lambda^{\top}\beta(s_i)-u_i)^2$
 
 ## 6. Online Methods
+离线方法：在按策略执行行动之前，离线计算整个状态空间上的策略
+
+在线方法：将计算限制在当前可达的状态，减少了时间和空间
+
+### 1. Forward Search
+前向搜索是能够从当前状态s向前看d步，返回最优actiion和对应的值
+
+![20200424094315](https://raw.githubusercontent.com/s974534426/Img_for_notes/master/20200424094315.png)
+
+复杂度为$O((|S|*|A|)^d)$
+
+### 2. Branch and Bound Search
+类似alpha beta剪枝
+
+分支限界法是前向搜索的一种扩展，使用值函数的先验知识的上下界来进行剪枝
+
+但时间复杂度不变
+
+下面的伪代码中，第五行的行动要按照上界降序排列
+
+![20200424094833](https://raw.githubusercontent.com/s974534426/Img_for_notes/master/20200424094833.png)
+
+### 3. Sparse Sampling
+采样法可以避免前向搜索和分支限界法的复杂度，但不能保证返回最优解，在大多数情况下可以产生近似最优解。一种重要的方法为稀疏采样
+
+稀疏采样法和前向搜索算法的主要区别是迭代n次采样，而不是在整个状态空间中搜索，并且使用产生式模型G
 
 
 
+### 4. Monte Carlo Tree Search
+蒙特卡洛树搜索是最成功的基于采样的在线算法之一
+
+使用产生式模型，计算复杂度不随着深度指数增加
+
+分为四个阶段
+
+1. 选择，使用树策略，选择一个需要扩展的节点。从根节点开始，在搜索树中前向选择，直到到达一个不在T中的结点S
+2. 扩展
+3. Rollout评价，使用默认策略，指导新扩展节点到指定深度的行动选择
+4. 反向更新
+
+不断重复就可以用增量式、非对称的方式构建一颗搜索树T
+
+![20200424105045](https://raw.githubusercontent.com/s974534426/Img_for_notes/master/20200424105045.png)
+
+![20200424105138](https://raw.githubusercontent.com/s974534426/Img_for_notes/master/20200424105138.png)
+
+![20200424105504](https://raw.githubusercontent.com/s974534426/Img_for_notes/master/20200424105504.png)
+
+![20200424100532](https://raw.githubusercontent.com/s974534426/Img_for_notes/master/20200424100532.png)
