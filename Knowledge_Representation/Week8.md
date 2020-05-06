@@ -38,6 +38,10 @@ ALC中的可满足性问题不是tractable的，复杂度介于NP完全和exp完
 2. 然后不断推理
 3. concept可满足当且仅当分支结束时，没有冲突出现
 
+主要要注意$A\sqsubseteq B$的NNF形式为$\neg A \cup B$
+
+![20200503211843](https://raw.githubusercontent.com/s974534426/Img_for_notes/master/20200503211843.png)
+
 之后给了一些例子，并且证明了tableau算法的Soundness，completeness，termination
 
 ### With TBox
