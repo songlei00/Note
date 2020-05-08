@@ -270,3 +270,58 @@ $$U^*_n(s) = max_{a}(R(s, a)+\gamma\sum_{s'}T(s'|s, a)U_{n-1}^*(s'))$$
 ![20200424105504](https://raw.githubusercontent.com/s974534426/Img_for_notes/master/20200424105504.png)
 
 ![20200424100532](https://raw.githubusercontent.com/s974534426/Img_for_notes/master/20200424100532.png)
+
+## 7. Direct Policy Search
+在策略空间中直接搜索
+
+目标函数，$U^{\pi_{\lambda}}(s) = \frac{1}{n}\sum_{i=1}^nu_i$，其中的$u_i$是使用策略$\pi_{\lambda}$进行第i次rollout评价得到的值
+
+期望回报是$V(\lambda)=\sum_sb(s)U^{\pi_{\lambda}}(s)$，其中的b是状态的分布
+
+使用蒙特卡洛来估计V，注意算法是对$V(\lambda)$的估计，虽然表达形式与U类似，但这里的每一个u的状态不用，状态是从b中采样得到的，所以是对V的估计
+
+![20200507203231](https://raw.githubusercontent.com/s974534426/Img_for_notes/master/20200507203231.png)
+
+如何在策略空间中搜索找到使得$V$最大的$\lambda$
+### 1. 局部搜索方法 爬山法 梯度上升法
+搜索策略：沿着最大值的邻居方向搜索，直到收敛
+
+### 2. 进化方法
+遗传算法
+
+遗传编程：使用树结构表示策略，比使用固定长度字符串更灵活，杂交是交换子树，变异是随机修改子树
+
+与其他方法结合得到遗传局部搜索，文化基因算法等等。
+
+### 3. 交叉熵方法
+#### 信息量
+事件$X=i$的信息量为$I(x^i) = -logP(x^i)$
+
+#### 熵
+熵是信息量的期望$H(x)=\sum_{i=1}^nP(x^i)I(x^i) = -\sum_{i=1}^nP(x^i)logP(x^i)$
+
+用期望符号表示为$H(x) = E_{x\sim P}[I(x)] = -E_{x\sim P}[logP(x)]$
+
+#### 相对熵的概念和性质
+也称KL散度，表示同一个随机变量的两个不同分布间的距离，越小两个分布越相似
+
+P相对于Q的相对熵：$D_{KL}(P || Q) = E_{x\sim P}[log\frac{P(x)}{Q(x)}] = E_{x\sim P}[logP(x) - logQ(x)]$
+
+##### 性质
+1. $D_{KL}(P || Q) \geq 0$，$D_{KL}(P || Q) = 0$时，有P=Q
+2. 不对称性
+
+#### 交叉熵
+$H(P, Q)$，用分布$Q(x)$表示真实的分布$P(x)$的差异程度
+
+$$H(P, Q) = -E_{x\sim P}logQ(x)$$
+
+代入相对熵的公式，有$H(P, Q) = H(P) + D_{KL}(P || Q)$
+
+最小化交叉熵等价于最小化相对熵
+
+#### 交叉熵方法
+1. 采样：从分布$P(\lambda | \theta)$中采样n次，使用蒙特卡洛策略估计方法评估性能，将样本按降序排列
+2. 更新，选择性能最好的m个样本(精英样本)基于交叉熵最小化进行更新，$\theta \leftarrow argmax_{\theta}\sum_{j=1}^mlogP(\lambda_j| \theta)$，因为交叉熵表达式中有负号，这里的表达式其实是负交叉熵，所以是最小化，但式子前面是最大化。
+
+![20200508084203](https://raw.githubusercontent.com/s974534426/Img_for_notes/master/20200508084203.png)
