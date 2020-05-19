@@ -139,6 +139,17 @@ $$P(s' | s, b, a) = \int_{\theta} b(\theta)P(s' | s, \theta, a)d\theta = \int_{\
 
 当问题的维度很高时，这种方法很attractive
 
+### 蒙特卡洛方法
+只适用于情节式任务，在每个情节结束后，更新函数
+
+$$U$$
+
+#### 蒙特卡洛预测
+输入策略$\pi$，循环中进行一系列的采样，然后进行更新
+
+### 时序差分法
+
+
 ### 1. Incremental Estimation
 
 ### 2. Q-learning
