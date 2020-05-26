@@ -1,11 +1,13 @@
 # Ontology Based Data Access
-数据和知识放在一起
+Knowledge base $K = (T, A)$，包括Tbox和Abox
 
-OBDA是一个数据库，但其中结合了知识，
+OBDA是一个结合了知识的数据库
 
-满足T和A，需要同时满足A和T所有axiom
+满足open world semantics
 
-所有满足T和A的所有I，就是Mod(T, A)
+I同时满足T和A，需要同时满足A和T所有axiom
+
+所有满足T和A的所有I的集合，表示为Mod(T, A)
 
 ## Query
 

@@ -160,3 +160,86 @@ $$U$$
 使用实际采取的行动更新Q，而不是像在Q-learning中一样，使用最好的行动
 
 $Q(s_t, a_t) = Q(s_t, a_t) + \alpha (r_t, \gamma Q(s_{t+1}, a_{t+1}) - Q(s_t, a_t))$
+
+## 7. 资格迹
+### $\lambda$回报
+各目标值的一种特殊的加权平均组合
+
+$G_t^{\lambda} = (1-\lambda) \sum_{n=1}^{\infty} \lambda^{n-1} G_{t: t+n}$
+
+$t+n\geq T$时，$G_{t: t+n} = G_t$，$G_t^{\lambda} = (1-\lambda) \sum_{n=1}^{T-t-1} \lambda^{n-1} G_{t: t+n} + \lambda ^{T-t-1}G_t$
+
+### 离线$\lambda$回报算法
+只适用情节式，使用$\lambda$回报$G_t^{\lambda}$作为目标值进行更新
+
+$$U(S_t) = U(S_t) + \alpha [G_t^{\lambda} - U(S_t)]$$
+
+与离线TD($\lambda$)在效果上等价
+
+是向前看的观点
+
+### 资格迹
+资格迹在离散稀疏奖赏时很有用
+
+状态s处的资格迹：状态s处的一个变量，随时间变化
+
+累计迹更新公式：
+
+$$ Z_t(s)=\left\{
+\begin{aligned}
+\gamma \lambda Z_{t-1}(s), if\ s\neq S_t \\
+\gamma \lambda Z_{t-1}(s) + 1, if\ s= S_t
+\end{aligned}
+\right.
+$$
+
+替代迹更新公式：
+
+$$ Z_t(s)=\left\{
+\begin{aligned}
+\gamma \lambda Z_{t-1}(s), if\ s\neq S_t \\
+1, if\ s= S_t
+\end{aligned}
+\right.
+$$
+
+荷兰迹更新公式：
+
+$$ Z_t(s)=\left\{
+\begin{aligned}
+\gamma \lambda Z_{t-1}(s), if\ s\neq S_t \\
+(1-\alpha)\gamma \lambda Z_{t-1}(s) + 1, if\ s= S_t
+\end{aligned}
+\right.
+$$
+
+$\alpha \rightarrow 0$，趋近累计迹
+
+$\alpha \rightarrow 1$，趋近替代迹
+
+相同的是，没有访问的装填都是以$\gamma \lambda$衰减
+
+### TD($\lambda$)
+比较复杂，具体看课件
+
+![20200521195144](https://raw.githubusercontent.com/s974534426/Img_for_notes/master/20200521195144.png)
+
+![20200521195427](https://raw.githubusercontent.com/s974534426/Img_for_notes/master/20200521195427.png)
+
+### Sarsa($\lambda$)
+![20200521195427](https://raw.githubusercontent.com/s974534426/Img_for_notes/master/1.%20%E8%AE%A1%E7%AE%97%E5%BD%93%E5%89%8D%E7%8A%B6%E6%80%81TD%E8%AF%AF%E5%B7%AE%0A2.%20%E6%9B%B4%E6%96%B0%E8%B5%84%E6%A0%BC%E8%BF%B9%0A3.%20%E6%9B%B4%E6%96%B0%E5%80%BC%E5%87%BD%E6%95%B0.png)
+
+### Q($\lambda$)
+![20200521195854](https://raw.githubusercontent.com/s974534426/Img_for_notes/master/20200521195854.png)
+
+## 8. Generalization
+### 半梯度预测和控制
+看不懂。。。
+
+### 近似和抽象
+#### 局部近似
+![20200521202905](https://raw.githubusercontent.com/s974534426/Img_for_notes/master/20200521202905.png)
+
+#### 全局近似
+
+### 深度Q网络

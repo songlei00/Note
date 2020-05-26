@@ -77,7 +77,9 @@ Data complexity is in LogSapce, so it is polytime and therefore tractable. Combi
 ## Open World Semantics
 certain answer，此时要基于D判断，而前面用的是I
 
+$certainanswer(F(x_1, ..., x_n), D) = \{ (a_1, ..., a_n) | D\models F(a_1, ..., a_n) \}$
 
+在open world assumption中，答案很多时候是don't know，因为我们可以增加一些条件，使得他不成立
 
 # Using Abox to save data
 
